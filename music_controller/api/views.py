@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework import generics
 
-from music_controller.api.models import Room
-from music_controller.api.serializers import RoomSerializer
+from .models import Room
+from .serializers import RoomSerializer
 
 
 # Create your views here.

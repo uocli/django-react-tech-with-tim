@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from music_controller.api.models import Room
+from .models import Room
 
 
 class RoomSerializer(serializers.ModelSerializer):
