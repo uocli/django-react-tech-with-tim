@@ -5,5 +5,5 @@ https://youtu.be/JD-age0BPVo?feature=shared
 ```shell
 python3 migation.py makemigrations
 python3 migation.py migrate
-py
+python3 migation.py runserver
 ```
