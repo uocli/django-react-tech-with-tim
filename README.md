@@ -18,3 +18,12 @@ npm i @babel/plugin-proposal-class-properties --legacy-peer-deps --save-dev
 npm i react-router-dom --legacy-peer-deps --save-dev
 npm i @material-ui/icons --legacy-peer-deps --save-dev
 ```
+#### backend
+```shell
+python3 manage.py runserver
+```
+#### frontend
+```shell
+npm run dev
+```
+
