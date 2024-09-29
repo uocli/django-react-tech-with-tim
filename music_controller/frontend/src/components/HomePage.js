@@ -19,6 +19,10 @@ export default function HomePage(props) {
             });
     });
 
+    const clearRoomCode = () => {
+        setRoomCode(null);
+    };
+
     const RenderHomePage = () => {
         return (
             <Grid container spacing={3}>
@@ -44,7 +48,7 @@ export default function HomePage(props) {
                 <Route exact path="/" element={roomCode ? <Navigate to={`/room/${roomCode}`} /> : <RenderHomePage />} />
                 <Route path="/join" element={<RoomJoinPage />} />
                 <Route path="/create" element={<CreateRoomPage />} />
-                <Route path="/room/:roomCode" element={<Room />} />
+                <Route path="/room/:roomCode" element={<Room leaveRoomCallback={clearRoomCode} />} />
             </Routes>
         </Router>
     );
