@@ -9,7 +9,17 @@ export default class RoomJoinPage extends Component {
             roomCode: "",
             error: "",
         };
+        this.handleTextFieldChange = this.handleTextFieldChange.bind(this);
+        this.roomButtonPressed = this.roomButtonPressed.bind(this);
     }
+
+    handleTextFieldChange(event) {
+        this.setState({
+            roomCode: event.target.value,
+        });
+    }
+
+    roomButtonPressed(event) {}
 
     render() {
         return (
@@ -27,9 +37,19 @@ export default class RoomJoinPage extends Component {
                         value={this.state.roomCode}
                         helperText={this.state.error}
                         variant="outlined"
+                        onChange={this.handleTextFieldChange}
                     />
                 </Grid>
-                <Button></Button>
+                <Grid item xs={12} align="center">
+                    <Button variant="contained" color="primary" onClick={this.roomButtonPressed}>
+                        Enter Room
+                    </Button>
+                </Grid>
+                <Grid item xs={12} align="center">
+                    <Button variant="contained" color="secondary" to="/" component={Link}>
+                        Back
+                    </Button>
+                </Grid>
             </Grid>
         );
     }
