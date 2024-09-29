@@ -9,7 +9,7 @@ export default class App extends Component {
 
     render() {
         return (
-            <div>
+            <div className="center">
                 <HomePage />
             </div>
         );
@@ -17,4 +17,8 @@ export default class App extends Component {
 }
 
 const root = ReactDOM.createRoot(document.getElementById("app"));
-root.render(<React.StrictMode><App /></React.StrictMode>);
+root.render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+);
