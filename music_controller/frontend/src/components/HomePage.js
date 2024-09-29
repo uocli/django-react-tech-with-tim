@@ -1,13 +1,24 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import RoomJoinPage from "./RoomJoinPage";
 import CreateRoomPage from "./CreateRoomPage";
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, Navigate, useNavigate } from "react-router-dom";
 import Room from "./Room";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
 export default function HomePage(props) {
+    const [roomCode, setRoomCode] = useState(null);
+    // const navigate = useNavigate();
+
+    useEffect(() => {
+        fetch("/api/user-in-room")
+            .then((response) => response.json())
+            .then(({ code }) => {
+                setRoomCode(code);
+            });
+    });
+
     const RenderHomePage = () => {
         return (
             <Grid container spacing={3}>
@@ -30,7 +41,7 @@ export default function HomePage(props) {
     return (
         <Router>
             <Routes>
-                <Route exact path="/" element={<RenderHomePage />} />
+                <Route exact path="/" element={roomCode ? <Navigate to={`/room/${roomCode}`} /> : <RenderHomePage />} />
                 <Route path="/join" element={<RoomJoinPage />} />
                 <Route path="/create" element={<CreateRoomPage />} />
                 <Route path="/room/:roomCode" element={<Room />} />
