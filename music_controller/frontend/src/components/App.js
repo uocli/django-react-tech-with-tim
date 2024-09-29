@@ -10,11 +10,11 @@ export default class App extends Component {
     render() {
         return (
             <div>
-                <HomePage/>
+                <HomePage />
             </div>
         );
     }
 }
 
-const root = ReactDOM.createRoot(document.getElementById("app"))
-root.render(<App/>)
+const root = ReactDOM.createRoot(document.getElementById("app"));
+root.render(<React.StrictMode><App /></React.StrictMode>);
