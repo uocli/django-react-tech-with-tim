@@ -1,5 +1,5 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -10,12 +10,25 @@ import { Link } from "react-router-dom";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { Collapse } from "@material-ui/core";
+
+const defaultProps = {
+    votesToSkip: 2,
+    guestCanPause: false,
+    roomCode: null,
+    update: false,
+    updateCallback: () => {},
+};
 
 export default function CreateRoomPage(props) {
     const defaultVotes = 2;
     const navigate = useNavigate();
-    const [guestCanPause, setGuestCanPause] = React.useState(false);
-    const [votesToSkip, setVotesToSkip] = React.useState(defaultVotes);
+    const [roomCode, setRoomCode] = useState(props.roomCode || defaultProps.roomCode);
+    const [votesToSkip, setVotesToSkip] = useState(props.votesToSkip || defaultProps.votesToSkip);
+    const [guestCanPause, setGuestCanPause] = useState(props.guestCanPause || defaultProps.guestCanPause);
+    const [update, setUpdate] = useState(props.update || defaultProps.update);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
 
     const handleVotesChange = (event) => {
         setVotesToSkip(+event.target.value || 1);
@@ -40,11 +53,73 @@ export default function CreateRoomPage(props) {
             .catch((error) => console.log(error));
     };
 
+    const handleUpdateButtonPressed = () => {
+        const requestOptions = {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                votes_to_skip: votesToSkip,
+                guest_can_pause: guestCanPause,
+                code: roomCode,
+            }),
+        };
+        fetch("/api/update-room", requestOptions).then((response) => {
+            if (response.ok) {
+                setErrorMessage("");
+                setSuccessMessage("Room Updated Successfully!");
+            } else {
+                setErrorMessage("Error Updating Room...");
+                setSuccessMessage("");
+            }
+            props.updateCallback();
+        });
+    };
+
+    const renderCreateButtons = () => {
+        return (
+            <>
+                <Grid item xs={12} align="center">
+                    <Button color="primary" variant="contained" onClick={handleRoomButtonPressed}>
+                        Create A Room
+                    </Button>
+                </Grid>
+                <Grid item xs={12} align="center">
+                    <Button color="secondary" variant="contained" to="/" component={Link}>
+                        Back
+                    </Button>
+                </Grid>
+            </>
+        );
+    };
+
+    const renderUpdateButtons = () => {
+        return (
+            <Grid item xs={12} align="center">
+                <Button color="primary" variant="contained" onClick={handleUpdateButtonPressed}>
+                    Update Room
+                </Button>
+            </Grid>
+        );
+    };
+
     return (
         <Grid container spacing={1}>
             <Grid item xs={12} align="center">
+                <Collapse in={!!successMessage || !!errorMessage}>
+                    {successMessage ? (
+                        <Typography variant="h6" compact="h6" style={{ color: "green" }}>
+                            {successMessage}
+                        </Typography>
+                    ) : (
+                        <Typography variant="h6" compact="h6" style={{ color: "red" }}>
+                            {errorMessage}
+                        </Typography>
+                    )}
+                </Collapse>
+            </Grid>
+            <Grid item xs={12} align="center">
                 <Typography component="h4" variant="h4">
-                    Create A Room
+                    {update ? "Update Room" : "Create A Room"}
                 </Typography>
             </Grid>
             <Grid item xs={12} align="center">
@@ -52,7 +127,10 @@ export default function CreateRoomPage(props) {
                     <FormHelperText>
                         <div align="center">Guest Control of Playback State</div>
                     </FormHelperText>
-                    <RadioGroup row defaultValue="true" onChange={handleGuestCanPauseChange}>
+                    <RadioGroup
+                        row
+                        defaultValue={guestCanPause ? "true" : "false"}
+                        onChange={handleGuestCanPauseChange}>
                         <FormControlLabel
                             value="true"
                             control={<Radio color="primary" />}
@@ -85,16 +163,7 @@ export default function CreateRoomPage(props) {
                     </FormHelperText>
                 </FormControl>
             </Grid>
-            <Grid item xs={12} align="center">
-                <Button color="primary" variant="contained" onClick={handleRoomButtonPressed}>
-                    Create A Room
-                </Button>
-            </Grid>
-            <Grid item xs={12} align="center">
-                <Button color="secondary" variant="contained" to="/" component={Link}>
-                    Back
-                </Button>
-            </Grid>
+            {update ? renderUpdateButtons() : renderCreateButtons()}
         </Grid>
     );
 }
