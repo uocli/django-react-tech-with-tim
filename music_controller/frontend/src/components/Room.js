@@ -19,6 +19,7 @@ export default function Room(props) {
     const [isHost, setIsHost] = useState(defaultProps.isHost);
     const [showSettings, setShowSettings] = useState(defaultProps.showSettings);
     const navigate = useNavigate();
+    const [spotifyAuthenticated, setSpotifyAuthenticated] = useState(false);
 
     const getRoomDetails = () => {
         fetch("/api/get-room" + "?code=" + roomCode)
@@ -33,6 +34,24 @@ export default function Room(props) {
                 setVotesToSkip(votes_to_skip);
                 setGuestCanPause(guest_can_pause);
                 setIsHost(is_host);
+                if (is_host) {
+                    authenticateSpotify();
+                }
+            });
+    };
+
+    const authenticateSpotify = () => {
+        fetch("/spotify/is-authenticated")
+            .then((response) => response.json())
+            .then((data) => {
+                setSpotifyAuthenticated(data.status);
+                if (!data.status) {
+                    fetch("/spotify/get-auth-url")
+                        .then((response) => response.json())
+                        .then((data) => {
+                            window.location.replace(data.url);
+                        });
+                }
             });
     };
 
