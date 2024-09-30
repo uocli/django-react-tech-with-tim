@@ -3,12 +3,21 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Grid2 as Grid, Typography, Button } from "@mui/material";
 import CreateRoomPage from "./CreateRoomPage";
 
+export const defaultProps = {
+    votesToSkip: 2,
+    guestCanPause: false,
+    roomCode: null,
+    isHost: false,
+    update: false,
+    showSettings: false,
+};
+
 export default function Room(props) {
     const { roomCode } = useParams();
-    const [votesToSkip, setVotesToSkip] = useState(2);
-    const [guestCanPause, setGuestCanPause] = useState(false);
-    const [isHost, setIsHost] = useState(false);
-    const [showSettings, setShowSettings] = useState(false);
+    const [votesToSkip, setVotesToSkip] = useState(defaultProps.votesToSkip);
+    const [guestCanPause, setGuestCanPause] = useState(defaultProps.guestCanPause);
+    const [isHost, setIsHost] = useState(defaultProps.isHost);
+    const [showSettings, setShowSettings] = useState(defaultProps.showSettings);
     const navigate = useNavigate();
 
     const getRoomDetails = () => {

@@ -12,22 +12,14 @@ import {
     FormControlLabel,
     Collapse,
 } from "@mui/material";
-
-const defaultProps = {
-    votesToSkip: 2,
-    guestCanPause: false,
-    roomCode: null,
-    update: false,
-    updateCallback: () => {},
-};
+import { defaultProps } from "./Room";
 
 export default function CreateRoomPage(props) {
-    const defaultVotes = 2;
     const navigate = useNavigate();
-    const [roomCode, setRoomCode] = useState(props.roomCode || defaultProps.roomCode);
+    const roomCode = props.roomCode || defaultProps.roomCode;
     const [votesToSkip, setVotesToSkip] = useState(props.votesToSkip || defaultProps.votesToSkip);
     const [guestCanPause, setGuestCanPause] = useState(props.guestCanPause || defaultProps.guestCanPause);
-    const [update, setUpdate] = useState(props.update || defaultProps.update);
+    const update = props.update || defaultProps.update;
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
 
@@ -152,7 +144,7 @@ export default function CreateRoomPage(props) {
                     <Input
                         required={true}
                         type="number"
-                        defaultValue={defaultVotes}
+                        defaultValue={votesToSkip}
                         onChange={handleVotesChange}
                         inputProps={{
                             min: 1,
