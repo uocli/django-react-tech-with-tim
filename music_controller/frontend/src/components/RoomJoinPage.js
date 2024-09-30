@@ -1,7 +1,6 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { TextField, Button, Grid, Typography } from "@material-ui/core";
+import { useNavigate, Link } from "react-router-dom";
+import { TextField, Button, Grid2 as Grid, Typography } from "@mui/material";
 
 export default function RoomJoinPage(props) {
     const navigate = useNavigate();
@@ -35,14 +34,14 @@ export default function RoomJoinPage(props) {
 
     return (
         <Grid container spacing={1}>
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <Typography variant="h4" component="h4">
                     Join a Room
                 </Typography>
             </Grid>
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <TextField
-                    error={error}
+                    error={!!error}
                     label="Code"
                     placeholder="Enter a Room Code"
                     value={roomCode}
@@ -51,12 +50,12 @@ export default function RoomJoinPage(props) {
                     onChange={handleTextFieldChange}
                 />
             </Grid>
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <Button variant="contained" color="primary" onClick={roomButtonPressed}>
                     Enter Room
                 </Button>
             </Grid>
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <Button variant="contained" color="secondary" to="/" component={Link}>
                     Back
                 </Button>

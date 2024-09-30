@@ -3,9 +3,9 @@ import RoomJoinPage from "./RoomJoinPage";
 import CreateRoomPage from "./CreateRoomPage";
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useNavigate } from "react-router-dom";
 import Room from "./Room";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+import Grid from "@mui/material/Grid2";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 export default function HomePage(props) {
     const [roomCode, setRoomCode] = useState(null);
@@ -25,19 +25,23 @@ export default function HomePage(props) {
 
     const RenderHomePage = () => {
         return (
-            <Grid container spacing={3}>
-                <Grid item xs={12} align="center">
+            <Grid container spacing={3} size={12} align="center">
+                <Grid size={12} align="center">
                     <Typography variant="h3" compact="h3">
                         House Party
                     </Typography>
                 </Grid>
-                <Grid item xs={12} align="center">
-                    <Button disableElevation variant="contained" color="primary" to="/join" component={Link}>
-                        Join a Room
-                    </Button>
-                    <Button variant="contained" color="secondary" to="/create" component={Link}>
-                        Create a Room
-                    </Button>
+                <Grid container size={12} align="center" spacing={1}>
+                    <Grid size={6} align="right">
+                        <Button disableElevation variant="contained" color="primary" to="/join" component={Link}>
+                            Join a Room
+                        </Button>
+                    </Grid>
+                    <Grid size={6} align="left">
+                        <Button variant="contained" color="secondary" to="/create" component={Link}>
+                            Create a Room
+                        </Button>
+                    </Grid>
                 </Grid>
             </Grid>
         );

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Grid, Typography, Button } from "@material-ui/core";
+import { Grid2 as Grid, Typography, Button } from "@mui/material";
 import CreateRoomPage from "./CreateRoomPage";
 
 export default function Room(props) {
@@ -40,7 +40,7 @@ export default function Room(props) {
 
     const renderSettingsButton = () => {
         return (
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <Button variant="contained" color="primary" onClick={() => setShowSettings(true)}>
                     Settings
                 </Button>
@@ -51,7 +51,7 @@ export default function Room(props) {
     const renderSettings = () => {
         return (
             <Grid container spacing={1}>
-                <Grid item xs={12} align="center">
+                <Grid size={12} align="center">
                     <CreateRoomPage
                         update={true}
                         votesToSkip={votesToSkip}
@@ -60,7 +60,7 @@ export default function Room(props) {
                         updateCallback={getRoomDetails}
                     />
                 </Grid>
-                <Grid item xs={12} align="center">
+                <Grid size={12} align="center">
                     <Button variant="contained" color="secondary" onClick={() => setShowSettings(false)}>
                         Close
                     </Button>
@@ -75,28 +75,28 @@ export default function Room(props) {
         renderSettings()
     ) : (
         <Grid container spacing={1}>
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <Typography variant="h1" compact="h1">
                     Code: {roomCode}
                 </Typography>
             </Grid>
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <Typography variant="h5" compact="h5">
                     Votes To Skip: {votesToSkip}
                 </Typography>
             </Grid>
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <Typography variant="h5" compact="h5">
                     Guest Can Pause: {guestCanPause.toString()}
                 </Typography>
             </Grid>
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <Typography variant="h5" compact="h5">
                     Host: {isHost.toString()}
                 </Typography>
             </Grid>
             {isHost ? renderSettingsButton() : null}
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <Button variant="contained" color="secondary" onClick={leaveRoomPressed}>
                     Leave Room
                 </Button>
