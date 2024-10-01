@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Grid2 as Grid, Typography, Button } from "@mui/material";
 import CreateRoomPage from "./CreateRoomPage";
+import MusicPlayer from "./MusicPlayer";
 
 export const defaultProps = {
     votesToSkip: 2,
@@ -20,6 +21,14 @@ export default function Room(props) {
     const [showSettings, setShowSettings] = useState(defaultProps.showSettings);
     const navigate = useNavigate();
     const [spotifyAuthenticated, setSpotifyAuthenticated] = useState(false);
+    const [song, setSong] = useState({});
+
+    useEffect(() => {
+        const interval = setInterval(getCurrentSong, 2000);
+        return () => {
+            clearInterval(interval);
+        };
+    });
 
     const getRoomDetails = () => {
         fetch("/api/get-room" + "?code=" + roomCode)
@@ -39,6 +48,7 @@ export default function Room(props) {
                 }
             });
     };
+    getRoomDetails();
 
     const authenticateSpotify = () => {
         fetch("/spotify/is-authenticated")
@@ -64,6 +74,20 @@ export default function Room(props) {
             props.leaveRoomCallback();
             navigate("/");
         });
+    };
+
+    const getCurrentSong = () => {
+        fetch("/spotify/current-song")
+            .then((response) => {
+                if (!response.ok) {
+                    return {};
+                } else {
+                    return response.json();
+                }
+            })
+            .then((data) => {
+                setSong(data);
+            });
     };
 
     const renderSettingsButton = () => {
@@ -97,8 +121,6 @@ export default function Room(props) {
         );
     };
 
-    getRoomDetails();
-
     return showSettings ? (
         renderSettings()
     ) : (
@@ -108,21 +130,7 @@ export default function Room(props) {
                     Code: {roomCode}
                 </Typography>
             </Grid>
-            <Grid size={12} align="center">
-                <Typography variant="h5" compact="h5">
-                    Votes To Skip: {votesToSkip}
-                </Typography>
-            </Grid>
-            <Grid size={12} align="center">
-                <Typography variant="h5" compact="h5">
-                    Guest Can Pause: {guestCanPause.toString()}
-                </Typography>
-            </Grid>
-            <Grid size={12} align="center">
-                <Typography variant="h5" compact="h5">
-                    Host: {isHost.toString()}
-                </Typography>
-            </Grid>
+            <MusicPlayer {...{ song }} />
             {isHost ? renderSettingsButton() : null}
             <Grid size={12} align="center">
                 <Button variant="contained" color="secondary" onClick={leaveRoomPressed}>

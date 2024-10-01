@@ -120,18 +120,15 @@ export default function CreateRoomPage(props) {
                     <FormHelperText>
                         <div align="center">Guest Control of Playback State</div>
                     </FormHelperText>
-                    <RadioGroup
-                        row
-                        defaultValue={guestCanPause ? "true" : "false"}
-                        onChange={handleGuestCanPauseChange}>
+                    <RadioGroup row defaultValue={!!guestCanPause} onChange={handleGuestCanPauseChange}>
                         <FormControlLabel
-                            value="true"
+                            value={true}
                             control={<Radio color="primary" />}
                             label="Play/Pause"
                             labelPlacement="bottom"
                         />
                         <FormControlLabel
-                            value="false"
+                            value={false}
                             control={<Radio color="secondary" />}
                             label="No Control"
                             labelPlacement="bottom"
