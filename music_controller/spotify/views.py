@@ -8,6 +8,8 @@ from .utils import (
     update_or_create_user_tokens,
     is_spotify_authenticated,
     execute_spotify_api_request,
+    play_song,
+    pause_song,
 )
 from api.models import Room
 
@@ -103,3 +105,31 @@ class CurrentSongView(APIView):
             data=song,
             status=status.HTTP_200_OK,
         )
+
+
+class PauseSongView(APIView):
+    def put(self, response, format=None):
+        room_code = self.request.session.get("room_code")
+        room = Room.objects.filter(code=room_code)
+        if room.exists():
+            room = room[0]
+        else:
+            return Response({}, status=status.HTTP_404_NOT_FOUND)
+        if self.request.session.session_key == room.host or room.guest_can_pause:
+            pause_song(room.host)
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+        return Response({}, status=status.HTTP_403_FORBIDDEN)
+
+
+class PlaySongView(APIView):
+    def put(self, response, format=None):
+        room_code = self.request.session.get("room_code")
+        room = Room.objects.filter(code=room_code)
+        if room.exists():
+            room = room[0]
+        else:
+            return Response({}, status=status.HTTP_404_NOT_FOUND)
+        if self.request.session.session_key == room.host or room.guest_can_pause:
+            play_song(room.host)
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+        return Response({}, status=status.HTTP_403_FORBIDDEN)
