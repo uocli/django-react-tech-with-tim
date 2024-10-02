@@ -7,16 +7,6 @@ export default function MusicPlayer(props) {
     const { image_url, time, duration, title, artist, is_playing } = song || {};
     const [isPlaying, setIsPlaying] = useState(is_playing);
     const songProgress = (time / duration) * 100;
-    const skipSong = (forward = true) => {
-        let currentIndex = props.queue.findIndex((songInQueue) => songInQueue.id === song.id);
-        let newIndex = currentIndex + (forward ? 1 : -1);
-        if (newIndex < 0) {
-            newIndex = props.queue.length - 1;
-        } else if (newIndex >= props.queue.length) {
-            newIndex = 0;
-        }
-        setSong(props.queue[newIndex]);
-    };
 
     const pauseSong = () => {
         const requestOptions = {
@@ -36,6 +26,15 @@ export default function MusicPlayer(props) {
         setIsPlaying(true);
     };
 
+    const skipSong = () => {
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+        };
+        fetch("/spotify/skip", requestOptions);
+        setIsPlaying(true);
+    };
+
     return (
         <Card container align="center">
             <Grid size={4} align="center">
@@ -48,8 +47,8 @@ export default function MusicPlayer(props) {
                 <Typography color="textSecondary" variant="subtitle1">
                     {artist}
                 </Typography>
-                <IconButton onClick={() => setIsPlaying(!isPlaying)}>
-                    {isPlaying ? <Pause onClick={() => playSong()} /> : <PlayArrow onClick={() => pauseSong()} />}
+                <IconButton onClick={isPlaying ? () => pauseSong() : () => playSong()}>
+                    {isPlaying ? <Pause /> : <PlayArrow />}
                 </IconButton>
                 <IconButton onClick={() => skipSong()}>
                     <SkipNext />
